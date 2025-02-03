@@ -10,8 +10,12 @@ import SwiftUI
 struct Menu: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var searchText = ""
-    @State private var category: String?
     @State private var isLoaded = false
+
+    @State private var startersIsOn = true
+    @State private var mainsIsOn = true
+    @State private var dessertsIsOn = true
+    @State private var drinksIsOn = true
 
     var body: some View {
         ScrollView {
@@ -40,44 +44,41 @@ struct Menu: View {
                     Spacer()
                     Text("Starters")
                         .padding()
-                        .background(Color(hex: 0xD3D3D3))
+                        .background(startersIsOn ? Color.capstoneYellow : Color(hex: 0xD3D3D3))
                         .cornerRadius(8)
                         .onTapGesture {
-                            category = category == nil || category != "starters" ? "starters" : nil
-                            let _ = buildPredicate()
+                            startersIsOn.toggle()
                         }
+
                     Spacer()
                     Text("Mains")
                         .padding()
-                        .background(Color(hex: 0xD3D3D3))
+                        .background(mainsIsOn ? Color.capstoneYellow : Color(hex: 0xD3D3D3))
                         .cornerRadius(8)
                         .onTapGesture {
-                            category = category == nil || category != "mains" ? "mains" : nil
-                            let _ = buildPredicate()
+                            mainsIsOn.toggle()
                         }
                     Spacer()
                     Text("Desserts")
                         .padding()
-                        .background(Color(hex: 0xD3D3D3))
+                        .background(dessertsIsOn ? Color.capstoneYellow : Color(hex: 0xD3D3D3))
                         .cornerRadius(8)
                         .onTapGesture {
-                            category = category == nil || category != "desserts" ? "desserts" : nil
-                            let _ = buildPredicate()
+                            dessertsIsOn.toggle()
                         }
                     Spacer()
                     Text("Drinks")
                         .padding()
-                        .background(Color(hex: 0xD3D3D3))
+                        .background(drinksIsOn ? Color.capstoneYellow : Color(hex: 0xD3D3D3))
                         .cornerRadius(8)
                         .onTapGesture {
-                            category = category == nil || category != "drinks" ? "drinks" : nil
-                            let _ = buildPredicate()
+                            drinksIsOn.toggle()
                         }
                     Spacer()
                 }
                 .padding(.bottom)
 
-                FetchedObjects(predicate: buildPredicate(), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
+                FetchedObjects(predicate: buildPredicates(), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
                     ForEach(dishes, id: \.id) { dish in
 
                         NavigationLink(destination: DishDetailView(dish.title!, dish.image!, formatPrice(dish.price!), dish.descr!)) {
@@ -130,12 +131,30 @@ struct Menu: View {
         }.resume()
     }
 
-    private func buildPredicate() -> NSPredicate {
-        if let category {
-            return NSPredicate(format: "category == %@", category)
-        } else {
-            return searchText.isEmpty ? NSPredicate(value: true) : NSPredicate(format: "title CONTAINS[cd] %@", searchText)
+    private func buildPredicates() -> NSCompoundPredicate {
+        guard searchText.isEmpty else {
+            return NSCompoundPredicate(orPredicateWithSubpredicates: [NSPredicate(format: "title CONTAINS[cd] %@", searchText)])
         }
+
+        var predicates: [NSPredicate] = []
+
+        if startersIsOn {
+            predicates.append(NSPredicate(format: "category == %@", "starters"))
+        }
+
+        if mainsIsOn {
+            predicates.append(NSPredicate(format: "category == %@", "mains"))
+        }
+
+        if dessertsIsOn {
+            predicates.append(NSPredicate(format: "category == %@", "desserts"))
+        }
+
+        if drinksIsOn {
+            predicates.append(NSPredicate(format: "category == %@", "drinks"))
+        }
+
+        return NSCompoundPredicate(orPredicateWithSubpredicates: predicates)
     }
 
     private func buildSortDescriptors() -> [NSSortDescriptor] {
