@@ -37,8 +37,8 @@ struct Onboarding: View {
                     .focused($focused, equals: .firstName)
                     .padding()
                     .background(Rectangle()
-                        .fill(Color.clear)
-                        .border(Color.gray)
+                        .fill(.clear)
+                        .border(.gray)
                     )
                     .padding([.top, .horizontal])
                     .onSubmit {
@@ -48,8 +48,8 @@ struct Onboarding: View {
                     .focused($focused, equals: .lastName)
                     .padding()
                     .background(Rectangle()
-                        .fill(Color.clear)
-                        .border(Color.gray)
+                        .fill(.clear)
+                        .border(.gray)
                     )
                     .padding([.top, .horizontal])
                     .onSubmit {
@@ -59,8 +59,8 @@ struct Onboarding: View {
                     .focused($focused, equals: .email)
                     .padding()
                     .background(Rectangle()
-                        .fill(Color.clear)
-                        .border(Color.gray)
+                        .fill(.clear)
+                        .border(.gray)
                     )
                     .padding()
                     .onSubmit {
@@ -75,7 +75,7 @@ struct Onboarding: View {
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.capstoneYellow)
-                .foregroundColor(Color.black)
+                .foregroundColor(.black)
                 .cornerRadius(8)
                 .padding()
             }

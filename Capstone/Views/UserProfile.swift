@@ -17,6 +17,9 @@ struct UserProfile: View {
     var body: some View {
         VStack {
             Image("little-lemon-logo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 180)
             
             Text("Personal Information")
                 .font(.title)
@@ -26,24 +29,25 @@ struct UserProfile: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 200)
                 .padding(.bottom)
+                .colorMultiply(Color(hex: 0xEDEFEE))
 
             Text("First Name")
                 .font(.headline)
                 .padding(.top)
-                .foregroundColor(.secondary)
+                .foregroundColor(.capstoneGreen)
             Text(firstName)
 
             Text("Last Name")
                 .font(.headline)
                 .padding(.top)
-                .foregroundColor(.secondary)
+                .foregroundColor(.capstoneGreen)
             Text(lastName)
 
             Text("Email")
                 .font(.headline)
                 .padding(.top)
-                .foregroundColor(.secondary)
-            Text(email)
+                .foregroundColor(.capstoneGreen)
+            Text(email.lowercased())
 
             Spacer()
             
@@ -54,7 +58,7 @@ struct UserProfile: View {
             .frame(maxWidth: .infinity)
             .padding()
             .background(Color.capstoneYellow)
-            .foregroundColor(Color.black)
+            .foregroundColor(.black)
             .cornerRadius(8)
             .padding()
         }

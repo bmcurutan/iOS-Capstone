@@ -12,7 +12,7 @@ struct CapstoneApp: App {
     var body: some Scene {
         WindowGroup {
             Onboarding()
-                .tint(Color.capstoneGreen)
+                .tint(.capstoneGreen)
         }
     }
 }

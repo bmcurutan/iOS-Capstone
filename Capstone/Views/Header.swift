@@ -13,13 +13,13 @@ struct Header: View {
             VStack(alignment: .leading) {
                 Text("Little Lemon")
                     .font(.largeTitle)
-                    .foregroundColor(Color.capstoneYellow)
+                    .foregroundColor(.capstoneYellow)
                 Text("Chicago")
                     .font(.title2)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(.white)
                 Text("We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.")
                     .font(.body)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(.white)
                     .padding(.top)
             }
             .padding()

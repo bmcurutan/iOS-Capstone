@@ -24,7 +24,7 @@ struct DishView: View {
         VStack {
             Rectangle()
                 .frame(height: 1)
-                .foregroundColor(Color.gray)
+                .foregroundColor(.gray)
                 .padding(.horizontal)
             
             HStack {
@@ -33,10 +33,10 @@ struct DishView: View {
                         .font(.headline)
                     Text("$\(price)")
                         .font(.body)
-                        .foregroundColor(Color.capstoneGreen)
+                        .foregroundColor(.capstoneGreen)
                     Text("\n\(category.uppercased())")
                         .font(.caption)
-                        .foregroundColor(Color.gray)
+                        .foregroundColor(.gray)
                 }
                 Spacer()
                 AsyncImage(url: URL(string: image)) { image in

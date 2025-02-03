@@ -21,6 +21,9 @@ struct Menu: View {
         ScrollView {
             VStack {
                 Image("little-lemon-logo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 180)
 
                 Header()
 
@@ -28,8 +31,8 @@ struct Menu: View {
                     TextField("Search menu", text: $searchText)
                         .padding()
                         .background(Rectangle()
-                            .fill(Color.white)
-                            .border(Color.gray)
+                            .fill(.white)
+                            .border(.gray)
                         )
                         .padding()
                 }
@@ -44,7 +47,7 @@ struct Menu: View {
                     Spacer()
                     Text("Starters")
                         .padding()
-                        .background(startersIsOn ? Color.capstoneYellow : Color(hex: 0xD3D3D3))
+                        .background(startersIsOn ? .capstoneYellow : Color(hex: 0xEDEFEE))
                         .cornerRadius(8)
                         .onTapGesture {
                             startersIsOn.toggle()
@@ -53,7 +56,7 @@ struct Menu: View {
                     Spacer()
                     Text("Mains")
                         .padding()
-                        .background(mainsIsOn ? Color.capstoneYellow : Color(hex: 0xD3D3D3))
+                        .background(mainsIsOn ? .capstoneYellow : Color(hex: 0xEDEFEE))
                         .cornerRadius(8)
                         .onTapGesture {
                             mainsIsOn.toggle()
@@ -61,7 +64,7 @@ struct Menu: View {
                     Spacer()
                     Text("Desserts")
                         .padding()
-                        .background(dessertsIsOn ? Color.capstoneYellow : Color(hex: 0xD3D3D3))
+                        .background(dessertsIsOn ? .capstoneYellow : Color(hex: 0xEDEFEE))
                         .cornerRadius(8)
                         .onTapGesture {
                             dessertsIsOn.toggle()
@@ -69,7 +72,7 @@ struct Menu: View {
                     Spacer()
                     Text("Drinks")
                         .padding()
-                        .background(drinksIsOn ? Color.capstoneYellow : Color(hex: 0xD3D3D3))
+                        .background(drinksIsOn ? .capstoneYellow : Color(hex: 0xEDEFEE))
                         .cornerRadius(8)
                         .onTapGesture {
                             drinksIsOn.toggle()
@@ -81,7 +84,7 @@ struct Menu: View {
                 FetchedObjects(predicate: buildPredicates(), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
                     ForEach(dishes, id: \.id) { dish in
 
-                        NavigationLink(destination: DishDetailView(dish.title!, dish.image!, formatPrice(dish.price!), dish.descr!)) {
+                        NavigationLink(destination: DishDetailView(dish.title!, dish.category!, dish.image!, formatPrice(dish.price!), dish.descr!)) {
                             DishView(dish.title!, dish.image!, formatPrice(dish.price!), dish.category!)
                         }
                     }
