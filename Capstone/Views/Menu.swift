@@ -9,35 +9,99 @@ import SwiftUI
 
 struct Menu: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @State var searchText = ""
+    @State private var searchText = ""
+    @State private var category: String?
+    @State private var isLoaded = false
 
     var body: some View {
-        VStack {
-            Text("Little Lemon")
-            Text("Chicago")
-            Text("We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.")
+        ScrollView {
+            VStack {
+                Image("little-lemon-logo")
 
-            TextField("Search menu", text: $searchText)
+                Header()
 
-            FetchedObjects(predicate: buildPredicate(), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
-                List {
+                ZStack {
+                    TextField("Search menu", text: $searchText)
+                        .padding()
+                        .background(Rectangle()
+                            .fill(Color.white)
+                            .border(Color.gray)
+                        )
+                        .padding()
+                }
+                .background(Color.capstoneGreen)
+                .padding(.top, -8)
+
+                Text("ORDER FOR DELIVERY")
+                    .font(.headline)
+                    .padding()
+
+                HStack() {
+                    Spacer()
+                    Text("Starters")
+                        .padding()
+                        .background(Color(hex: 0xD3D3D3))
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            category = category == nil || category != "starters" ? "starters" : nil
+                            let _ = buildPredicate()
+                        }
+                    Spacer()
+                    Text("Mains")
+                        .padding()
+                        .background(Color(hex: 0xD3D3D3))
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            category = category == nil || category != "mains" ? "mains" : nil
+                            let _ = buildPredicate()
+                        }
+                    Spacer()
+                    Text("Desserts")
+                        .padding()
+                        .background(Color(hex: 0xD3D3D3))
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            category = category == nil || category != "desserts" ? "desserts" : nil
+                            let _ = buildPredicate()
+                        }
+                    Spacer()
+                    Text("Drinks")
+                        .padding()
+                        .background(Color(hex: 0xD3D3D3))
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            category = category == nil || category != "drinks" ? "drinks" : nil
+                            let _ = buildPredicate()
+                        }
+                    Spacer()
+                }
+                .padding(.bottom)
+
+                FetchedObjects(predicate: buildPredicate(), sortDescriptors: buildSortDescriptors()) { (dishes: [Dish]) in
                     ForEach(dishes, id: \.id) { dish in
-                        HStack {
-                            Text("\(dish.title!) $\(dish.price!)")
-                            Spacer()
-                            AsyncImage(url: URL(string: dish.image!)) { image in
-                                image.image?.resizable()
-                            }
-                            .frame(width: 80, height: 80)
+
+                        NavigationLink(destination: DishDetailView(dish.title!, dish.image!, formatPrice(dish.price!), dish.descr!)) {
+                            DishView(dish.title!, dish.image!, formatPrice(dish.price!), dish.category!)
                         }
                     }
                 }
             }
+            .onAppear() {
+                if !isLoaded {
+                    getMenuData()
+                    isLoaded = true
+                }
+            }
         }
-        .padding()
-        .onAppear() {
-            getMenuData()
-        }
+    }
+
+    private func formatPrice(_ price: String) -> String {
+        guard let intPrice = Int(price) else { return "0.00" }
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter.string(from: NSNumber(value: intPrice)) ?? "0.00"
     }
 
     private func getMenuData() {
@@ -56,6 +120,8 @@ struct Menu: View {
                     dish.title = menuItem.title
                     dish.image = menuItem.image
                     dish.price = menuItem.price
+                    dish.category = menuItem.category
+                    dish.descr = menuItem.description
                 }
                 try? viewContext.save()
             } catch {
@@ -65,7 +131,11 @@ struct Menu: View {
     }
 
     private func buildPredicate() -> NSPredicate {
-        return searchText.isEmpty ? NSPredicate(value: true) : NSPredicate(format: "title CONTAINS[cd] %@", searchText)
+        if let category {
+            return NSPredicate(format: "category == %@", category)
+        } else {
+            return searchText.isEmpty ? NSPredicate(value: true) : NSPredicate(format: "title CONTAINS[cd] %@", searchText)
+        }
     }
 
     private func buildSortDescriptors() -> [NSSortDescriptor] {

@@ -8,6 +8,9 @@
 import SwiftUI
 
 extension Color {
+    static var capstoneYellow = Color(hex: 0xF4CE14)
+    static var capstoneGreen = Color(hex: 0x3B4C45)
+
     init(hex: UInt, alpha: Double = 1) {
         self.init(
             .sRGB,

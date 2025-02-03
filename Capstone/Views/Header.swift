@@ -9,14 +9,27 @@ import SwiftUI
 
 struct Header: View {
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Little Lemon")
-                .font(.largeTitle)
-//                .fore
-            Text("Chicago")
-            Text("We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.")
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Little Lemon")
+                    .font(.largeTitle)
+                    .foregroundColor(Color.capstoneYellow)
+                Text("Chicago")
+                    .font(.title2)
+                    .foregroundColor(Color.white)
+                Text("We are a family owned Mediterranean restaurant, focused on traditional recipes served with a modern twist.")
+                    .font(.body)
+                    .foregroundColor(Color.white)
+                    .padding(.top)
+            }
+            .padding()
+
+            Spacer()
+
+            Image("food-item")
+                .padding(.trailing)
         }
-        .padding()
+        .background(Color.capstoneGreen)
     }
 
 }
